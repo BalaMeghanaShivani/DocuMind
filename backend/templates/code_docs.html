@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        .module-badge {
+            background: #e67e22;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.6em;
+            vertical-align: middle;
+        }
+
+        h2 {
+            color: #34495e;
+            border-left: 4px solid #e67e22;
+            padding-left: 10px;
+            margin-top: 30px;
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #f1c40f;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        .function {
+            margin-bottom: 20px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .fn-sig {
+            font-family: monospace;
+            font-weight: bold;
+            color: #2980b9;
+            font-size: 1.1em;
+        }
+
+        .params {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+
+        .param-table td {
+            padding: 4px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .type {
+            color: #8e44ad;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ title }} <span class="module-badge">MODULE</span></h1>
+    <p><strong>Module:</strong> {{ module_name }}</p>
+    <p>{{ description }}</p>
+
+    <h2>Functions</h2>
+    {% for fn in functions %}
+    <div class="function">
+        <div class="fn-sig">{{ fn.name }}()</div>
+
+        {% if fn.params %}
+        <div class="params">
+            <strong>Parameters:</strong>
+            <table class="param-table">
+                {% for param in fn.params %}
+                <tr>
+                    <td class="type">{{ param.type }}</td>
+                    <td><strong>{{ param.name }}</strong></td>
+                    <td>{{ param.desc }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+
+        {% if fn.returns %}
+        <div class="params" style="margin-top: 10px;">
+            <strong>Returns:</strong> <span class="type">{{ fn.returns.type }}</span> - {{ fn.returns.desc }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <h2>Usage Example</h2>
+    <div class="code-block">
+        {{ usage_example }}
+    </div>
+</body>
+
+</html>
