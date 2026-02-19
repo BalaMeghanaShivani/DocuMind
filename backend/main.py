@@ -7,7 +7,7 @@ import os
 import tempfile
 from fastapi import FastAPI, UploadFile, File, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 
 from models import (
     TextProcessRequest,
@@ -204,6 +204,27 @@ async def get_integration_status():
         foxit="connected" if FOXIT_CLIENT_ID else "missing",
         sanity="connected" if SANITY_TOKEN else "missing",
     )
+
+
+@app.get("/", tags=["System"])
+async def root():
+    """Root endpoint to verify the server is running."""
+    return {
+        "message": "DocuMind API is running!",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
+@app.get("/download/{filename}")
+async def download_file(filename: str):
+    """Serves generated PDF files."""
+    file_path = os.path.join("output", filename)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(file_path, media_type='application/pdf', filename=filename)
+
 
 if __name__ == "__main__":
     import uvicorn

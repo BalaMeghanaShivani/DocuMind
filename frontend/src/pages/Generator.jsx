@@ -93,9 +93,18 @@ function GeneratorContent() {
 
     const downloadPdf = () => {
         if (pdfPath) {
-            // If we had a real file server, we'd link to it. 
-            // For now, we simulate a download or just show the path.
-            alert(`PDF saved on server at: ${pdfPath}`)
+            // pdfPath usually comes as "output/meeting_notes_generated_enhanced.pdf"
+            // We want just the filename: "meeting_notes_generated_enhanced.pdf"
+            const filename = pdfPath.split('/').pop();
+            const downloadUrl = `/api/download/${filename}`;
+
+            // Trigger download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         }
     }
 
