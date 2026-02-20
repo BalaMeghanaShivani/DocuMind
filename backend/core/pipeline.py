@@ -42,7 +42,26 @@ def process_document_pipeline(raw_input: str, source_type: str = "text") -> Dict
     
     # 4. Generate PDF
     print(f"📄 Generating PDF via Foxit API...")
-    raw_pdf_path = foxit_client.generate_pdf_from_html(structured_data, doc_type.value)
+    
+    # 4a. Prepare Context for Template
+    import datetime
+    current_date = datetime.datetime.now().strftime("%b %d, %Y")
+    
+    # Check if 'content' key exists (Real LLM structure) or it's flat (Mock structure)
+    if "content" in structured_data:
+        content_body = structured_data["content"]
+    else:
+        # Filter out metadata keys from flat structure to get content
+        content_body = {k: v for k, v in structured_data.items() if k not in ["title", "doc_type", "date"]}
+
+    pdf_context = {
+        "title": structured_data.get("title", "Untitled Document"),
+        "doc_type": doc_type.value,
+        "date": structured_data.get("date", current_date),
+        "structured_data": content_body
+    }
+
+    raw_pdf_path = foxit_client.generate_pdf_from_html(pdf_context, doc_type.value)
     
     # 5. Enhance PDF (Foxit Integration)
     try:

@@ -21,7 +21,7 @@ export default function Header({ title }) {
                 </button>
 
                 <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-xs font-bold ring-2 ring-[var(--dm-bg-card)]">
-                    JD
+                    DM
                 </div>
             </div>
         </header>
